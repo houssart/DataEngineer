@@ -14,11 +14,17 @@ class LemondeSpider(scrapy.Spider):
         #title = response.css('title::text').extract_first()
         
         yield Request("https://www.lequipe.fr/Tennis/atp/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse2)
-        yield Request("https://www.lequipe.fr/Tennis/roland-garros/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'rolland garros'})
-        yield Request("https://www.lequipe.fr/Tennis/us-open/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'us open'})
-        yield Request("https://www.lequipe.fr/Tennis/open-d-australie/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'open australie'})
-        yield Request("https://www.lequipe.fr/Tennis/wimbledon/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'wimbledon'})
-        
+        yield Request("https://www.lequipe.fr/Tennis/roland-garros/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'rolland garros men'})
+        yield Request("https://www.lequipe.fr/Tennis/us-open/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'us open men'})
+        yield Request("https://www.lequipe.fr/Tennis/open-d-australie/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'open australie men'})
+        yield Request("https://www.lequipe.fr/Tennis/wimbledon/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'wimbledon men'})
+        yield Request("https://www.lequipe.fr/Tennis/wta/epreuve-simple-dames/page-palmares-individuel/par-annee",callback=self.parse2)
+        yield Request("https://www.lequipe.fr/Tennis/roland-garros/epreuve-simple-dames/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'rolland garros women'})
+        yield Request("https://www.lequipe.fr/Tennis/us-open/epreuve-simple-dames/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'us open women'})
+        yield Request("https://www.lequipe.fr/Tennis/open-d-australie/epreuve-simple-dames/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'open australie women'})
+        yield Request("https://www.lequipe.fr/Tennis/wimbledon/epreuve-simple-dames/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'wimbledon women'})
+    
+
     def parse2(self,response):
         joueur = response.css("a.Link.Palmares__victoryName::text").extract()
         joueurs = []
@@ -42,11 +48,11 @@ class LemondeSpider(scrapy.Spider):
             "années":années,
             "joueurs":sous_listes
         }
-        
-        with open('exemple.csv', 'w', newline='', encoding='utf-8') as fichier:
-            writer = csv.writer(fichier)
-            for ligne in sous_listes:
-                writer.writerow(ligne)
+ 
+        #with open('exemple.csv', 'w', newline='', encoding='utf-8') as fichier:
+        #    writer = csv.writer(fichier)
+        #    for ligne in sous_listes:
+        #        writer.writerow(ligne)
     
     
     def parse3(self,response):

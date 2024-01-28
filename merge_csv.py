@@ -9,10 +9,15 @@ def load_and_rename(file_path, tournament):
     return df
 
 # Load each CSV file
-df_open_australie = load_and_rename('newscrawler/newscrawler/open australie.csv', 'Open_Australie')
-df_rolland_garros = load_and_rename('newscrawler/newscrawler/rolland garros.csv', 'Rolland_Garros')
-df_us_open = load_and_rename('newscrawler/newscrawler/us open.csv', 'US_Open')
-df_wimbledon = load_and_rename('newscrawler/newscrawler/wimbledon.csv', 'Wimbledon')
+df_open_australie = load_and_rename('newscrawler/newscrawler/open australie men.csv', 'Open_Australie_men')
+df_rolland_garros = load_and_rename('newscrawler/newscrawler/rolland garros men.csv', 'Rolland_Garros_men')
+df_us_open = load_and_rename('newscrawler/newscrawler/us open men.csv', 'US_Open_men')
+df_wimbledon = load_and_rename('newscrawler/newscrawler/wimbledon men.csv', 'Wimbledon_men')
+
+df_open_australie = load_and_rename('newscrawler/newscrawler/open australie women.csv', 'Open_Australie_women')
+df_rolland_garros = load_and_rename('newscrawler/newscrawler/rolland garros women.csv', 'Rolland_Garros_women')
+df_us_open = load_and_rename('newscrawler/newscrawler/us open women.csv', 'US_Open_women')
+df_wimbledon = load_and_rename('newscrawler/newscrawler/wimbledon women.csv', 'Wimbledon_women')
 
 # Merge all DataFrames on the 'Year' column
 data_frames = [df_open_australie, df_rolland_garros, df_us_open, df_wimbledon]
