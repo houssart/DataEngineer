@@ -1,8 +1,7 @@
 import pandas as pd
 import plotly.express as px
 import dash
-from dash import Dash, dcc, Output, Input, html, ctx, dash_table
-import matplotlib.pyplot as plt
+from dash import Dash, dcc, Output, Input, html, ctx
 import pymongo
 from pymongo import MongoClient
 
@@ -123,6 +122,23 @@ app.layout = html.Div(children=[
     ),
     
     dcc.Dropdown(
+        id='tournament-dropdown',
+        options=[
+            {'label': 'Open Australie Men', 'value': 'Winner_Open_Australie_men'},
+            {'label': 'Open Australie Women', 'value': 'Winner_Open_Australie_women'},
+            {'label': 'Rolland Garros Men', 'value': 'Winner_Rolland_Garros_men'},
+            {'label': 'Rolland Garros Women', 'value': 'Winner_Rolland_Garros_women'},
+            {'label': 'US Open Men', 'value': 'Winner_US_Open_men'},
+            {'label': 'US Open Women', 'value': 'Winner_US_Open_women'},
+            {'label': 'Wimbledon Men', 'value': 'Winner_Wimbledon_men'},
+            {'label': 'Wimbledon Women', 'value': 'Winner_Wimbledon_women'}
+        ],
+        value='Winner_Open_Australie_men'
+    ),
+
+    dcc.Graph(id='top-players-graph'),
+    
+    dcc.Dropdown(
         id='year-dropdown',
         options=[{'label': year, 'value': year} for year in range(min_year, max_year + 1)],
         value=min_year
@@ -166,6 +182,23 @@ def update_winners_container(selected_year):
     
     return winners_divs
 
+
+@app.callback(
+    Output('top-players-graph', 'figure'),
+    [Input('tournament-dropdown', 'value')]
+)
+def update_top_players_graph(selected_tournament):
+    top_players = df[selected_tournament].dropna().value_counts().head(10)
+    
+    tournament_name = selected_tournament.replace("Winner_", "")
+    tournament_name = tournament_name.replace("_", " ")
+    fig = px.bar(top_players, x=top_players.index, y=top_players.values)
+    fig.update_layout(
+        title=f'Top 10 Players with Most Victories in {tournament_name}',
+        xaxis_title='Players',
+        yaxis_title='Number of Victories'
+    )
+    return fig
 
 if __name__ == '__main__':
     app.run_server(debug=True)
