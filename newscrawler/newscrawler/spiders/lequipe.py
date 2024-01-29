@@ -13,12 +13,12 @@ class LemondeSpider(scrapy.Spider):
     def parse(self, response):
         #title = response.css('title::text').extract_first()
         
-        yield Request("https://www.lequipe.fr/Tennis/atp/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse2)
+        yield Request("https://www.lequipe.fr/Tennis/atp/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse2,meta={'name':'atp'})
         yield Request("https://www.lequipe.fr/Tennis/roland-garros/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'rolland garros men'})
         yield Request("https://www.lequipe.fr/Tennis/us-open/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'us open men'})
         yield Request("https://www.lequipe.fr/Tennis/open-d-australie/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'open australie men'})
         yield Request("https://www.lequipe.fr/Tennis/wimbledon/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'wimbledon men'})
-        yield Request("https://www.lequipe.fr/Tennis/wta/epreuve-simple-dames/page-palmares-individuel/par-annee",callback=self.parse2)
+        yield Request("https://www.lequipe.fr/Tennis/wta/epreuve-simple-dames/page-palmares-individuel/par-annee",callback=self.parse2,meta={'name':'wta'})
         yield Request("https://www.lequipe.fr/Tennis/roland-garros/epreuve-simple-dames/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'rolland garros women'})
         yield Request("https://www.lequipe.fr/Tennis/us-open/epreuve-simple-dames/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'us open women'})
         yield Request("https://www.lequipe.fr/Tennis/open-d-australie/epreuve-simple-dames/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'open australie women'})
@@ -26,12 +26,14 @@ class LemondeSpider(scrapy.Spider):
     
 
     def parse2(self,response):
+        name = response.meta.get('name', 'default_name')
         joueur = response.css("a.Link.Palmares__victoryName::text").extract()
         joueurs = []
         for j in joueur:
             j = self.clean_spaces(j)
             if(j[len(j)-1] == ","):
-                j = j[0:len(j)-2]
+                j = j[0:len(j)-1]
+            j = j[3:]
             joueurs.append(j)
         
         sous_listes = [joueurs[i:i + 3] for i in range(0, len(joueurs), 3)]
@@ -49,10 +51,10 @@ class LemondeSpider(scrapy.Spider):
             "joueurs":sous_listes
         }
  
-        #with open('exemple.csv', 'w', newline='', encoding='utf-8') as fichier:
-        #    writer = csv.writer(fichier)
-        #    for ligne in sous_listes:
-        #        writer.writerow(ligne)
+        with open(name+'.csv', 'w', newline='', encoding='utf-8') as fichier:
+            writer = csv.writer(fichier)
+            for ligne in sous_listes:
+                writer.writerow(ligne)
     
     
     def parse3(self,response):
