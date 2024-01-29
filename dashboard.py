@@ -26,7 +26,6 @@ top_10_victories_men = victory_counts.head(10)
 
 selected_columns2 = df[['Year', 'Winner_Open_Australie_men', 'Winner_Rolland_Garros_men', 'Winner_US_Open_men', 'Winner_Wimbledon_men']]
 
-# Compter les victoires par joueur et par année
 winner_counts_by_year = {}
 for index, row in selected_columns2.iterrows():
     year = row['Year']
@@ -42,14 +41,51 @@ winner_counts_df_sorted = winner_counts_df.sort_values(by='Victories', ascending
 winner_counts_df_sorted = winner_counts_df_sorted.head(10)
 
 
+selected_columns3 = df[['Year', 'Winner_Open_Australie_women', 'Winner_Rolland_Garros_women', 'Winner_US_Open_women', 'Winner_Wimbledon_women']]
+
+winner_counts_by_year_women = {}
+for index, row in selected_columns3.iterrows():
+    year = row['Year']
+    winners = row[1:].dropna().value_counts()
+    if not winners.empty:
+        top_winner_women = winners.idxmax()
+        winner_counts_by_year_women[year] = (top_winner_women, winners[top_winner_women])
+
+winner_counts_women_df = pd.DataFrame(winner_counts_by_year_women.items(), columns=['Year', 'TopWinnerAndVictories'])
+winner_counts_women_df['TopWinner'] = winner_counts_women_df['TopWinnerAndVictories'].apply(lambda x: x[0])
+winner_counts_women_df['Victories'] = winner_counts_women_df['TopWinnerAndVictories'].apply(lambda x: x[1])
+winner_counts_women_df_sorted = winner_counts_women_df.sort_values(by='Victories', ascending=False)
+winner_counts_women_df_sorted = winner_counts_women_df_sorted.head(10)
+
+
+selected_columns4 = df.loc[:, ['Winner_Open_Australie_women','Winner_US_Open_women','Winner_Rolland_Garros_women','Winner_Wimbledon_women']]
+
+
+all_winners_women = pd.concat([selected_columns4[col].dropna() for col in selected_columns4])
+
+victory_counts_women = all_winners_women.value_counts()
+
+top_10_victories_women = victory_counts_women.head(10)
+
+
 
 fig1 = px.bar(top_10_victories_men, x=top_10_victories_men.index, y=top_10_victories_men.values)
-fig1.update_layout(title='Top 10 Players with Most Victories Across All Tournaments',
+fig1.update_layout(title='Top 10 Players (men) with Most Victories Across All Tournaments',
                   xaxis_title='Players',
                   yaxis_title='Number of Victories')
 
 fig2 = px.bar(winner_counts_df_sorted,x="TopWinner",y="Victories",hover_data=["Year"])
-fig2.update_layout(title='Top 10 Players with Most Victories in one Year',
+fig2.update_layout(title='Top 10 Players (men) with Most Victories in one Year',
+                  xaxis_title='Players',
+                  yaxis_title='Number of Victories')
+
+fig3 = px.bar(top_10_victories_women, x=top_10_victories_women.index, y=top_10_victories_women.values)
+fig3.update_layout(title='Top 10 Players (women) with Most Victories Across All Tournaments',
+                  xaxis_title='Players',
+                  yaxis_title='Number of Victories')
+
+fig4 = px.bar(winner_counts_women_df_sorted,x="TopWinner",y="Victories",hover_data=["Year"])
+fig4.update_layout(title='Top 10 Players (women) with Most Victories in one Year',
                   xaxis_title='Players',
                   yaxis_title='Number of Victories')
 
@@ -67,13 +103,23 @@ app.layout = html.Div(children=[
     '''),
 
     dcc.Graph(
-        id='victories-graph',
+        id='victories_men-graph',
         figure=fig1
     ),
     
     dcc.Graph(
-        id='victories_per_year-graph',
+        id='victories_per_year_men-graph',
         figure=fig2
+    ),
+    
+    dcc.Graph(
+        id='victories_women-graph',
+        figure=fig3
+    ),
+    
+    dcc.Graph(
+        id='victories_per_year_women-graph',
+        figure=fig4
     ),
     
     dcc.Dropdown(
