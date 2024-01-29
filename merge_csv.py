@@ -1,20 +1,16 @@
 import pandas as pd
 from functools import reduce
 
-# Define a function to load the CSV and rename the columns
 def load_and_rename(file_path, tournament):
     df = pd.read_csv(file_path)
-    # Assuming the first column is 'Year', the second is 'Winner', the third is 'Runner-Up', and the fourth is 'Score'
     df.columns = ['Year', f'Winner_{tournament}', f'Runner-Up_{tournament}', f'Score_{tournament}']
     return df
 
 def load_and_rename2(file_path, tournament):
     df = pd.read_csv(file_path)
-    # Assuming the first column is 'Year', the second is 'Winner', the third is 'Runner-Up', and the fourth is 'Score'
     df.columns = ['Year', f'1st_place_{tournament}', f'2nd_place_{tournament}', f'3rd_place_{tournament}']
     return df
 
-# Load each CSV file
 df_open_australie = load_and_rename('newscrawler/newscrawler/open australie men.csv', 'Open_Australie_men')
 df_rolland_garros = load_and_rename('newscrawler/newscrawler/rolland garros men.csv', 'Rolland_Garros_men')
 df_us_open = load_and_rename('newscrawler/newscrawler/us open men.csv', 'US_Open_men')
@@ -28,10 +24,8 @@ df_wimbledon_women = load_and_rename('newscrawler/newscrawler/wimbledon women.cs
 df_atp = load_and_rename2('newscrawler/newscrawler/atp.csv','atp')
 df_wta = load_and_rename2('newscrawler/newscrawler/wta.csv','wta')
 
-# Merge all DataFrames on the 'Year' column
 data_frames = [df_open_australie, df_rolland_garros, df_us_open, df_wimbledon,df_open_australie_women, df_rolland_garros_women, df_us_open_women, df_wimbledon_women,df_atp,df_wta]
 df_final_merged = reduce(lambda left, right: pd.merge(left, right, on=['Year'], how='outer'), data_frames)
 
-# Save the merged DataFrame to a new CSV file
 final_merged_csv_path = 'newscrawler/newscrawler/final_merged_tournaments.csv'
 df_final_merged.to_csv(final_merged_csv_path, index=False)

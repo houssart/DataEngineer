@@ -11,7 +11,6 @@ class LemondeSpider(scrapy.Spider):
     années = []
 
     def parse(self, response):
-        #title = response.css('title::text').extract_first()
         
         yield Request("https://www.lequipe.fr/Tennis/atp/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse2,meta={'name':'atp'})
         yield Request("https://www.lequipe.fr/Tennis/roland-garros/epreuve-simple-messieurs/page-palmares-individuel/par-annee",callback=self.parse3,meta={'name': 'rolland garros men'})
@@ -90,9 +89,9 @@ class LemondeSpider(scrapy.Spider):
                 années.append(i)
         
         yield{
-            #"années":années,
-            #"joueurs":joueurs,
-            #"loosers":loosers
+            "années":années,
+            "joueurs":joueurs,
+            "loosers":loosers,
             "scores":scores
         }
         
