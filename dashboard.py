@@ -15,10 +15,8 @@ collection = db_series["tennis"]
 data = list(collection.find())
 df = pd.DataFrame(data)
 
-print(df['Winner_US_Open_women'].head(10))
-
 selected_columns = df.loc[:, ['Winner_Open_Australie_men','Winner_US_Open_men','Winner_Rolland_Garros_men','Winner_Wimbledon_men']]
-print(selected_columns)
+
 
 all_winners = pd.concat([selected_columns[col].dropna() for col in selected_columns])
 
