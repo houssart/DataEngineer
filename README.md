@@ -1,8 +1,9 @@
 # DataEngineering - TENNIS L'équipe
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![Scrapy](https://img.shields.io/badge/Scrapy-%2314D08C.svg?style=for-the-badge&logo=scrapy&logoColor=white)
 ![Dash](https://img.shields.io/badge/Dash-%2574D08D.svg?style=for-the-badge&logo=dash&logoColor=white)
+![Mongo](https://img.shields.io/badge/Mongo-FF0000?style=for-the-badge&logo=mongodb&logoColor=white)
 
 ## Description
 
